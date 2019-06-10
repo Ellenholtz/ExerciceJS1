@@ -12,9 +12,23 @@ $(document).ready(function () {
         doCalc();
     });
 
+    function findUnitPrice() {
+		var radioValue = $("input[name='radio-btn']:checked").attr('id');
+		var unitPrice;
+		if (radioValue == "standard") {
+			unitPrice = 7565;
+		}
+		else if (radioValue == "premium") {
+			unitPrice = 12345;
+		}
+		else {
+			unitPrice = 15400;
+		}
+		return unitPrice;
+	}
 
-    $('#standart, #premium, #excelium').on('click', function () {
-        document.getElementById('elevPriceUnit').value = (7565).toFixed(2) + " $";
+    $('#standard, #premium, #excelium').on('click', function () {    
+        $('#elevPriceUnit').val(findUnitPrice().toFixed(2) + " $");
         doCalc();
     });
 
@@ -84,17 +98,35 @@ $(document).ready(function () {
 
     function setRequiredElevatorsResult(finNumElev) {
         $("#numElev_2, #numElev_3").val(parseFloat(finNumElev));
+        if (isNaN(finNumElev) || finNumElev == null) {
+            $("#numElev_3").val("");
+        }
     };
 
     function setPricesResults(finNumElev, roughTotal, installFee, total) {
+        
         $("#elevTotal").val(parseFloat(roughTotal).toFixed(2) + " $");
+        if (isNaN(roughTotal) || roughTotal == null) {
+            $("#elevTotal").val("");
+        }
         $("#installationFee").val(parseFloat(installFee).toFixed(2) + " $");
+        if (isNaN(installFee) || installFee == null) {
+            $("#installationFee").val("");
+        }
         $("#total_").val(parseFloat(total).toFixed(2) + " $");
+        if (isNaN(total) || total == null) {
+            $("#total_").val("");
+        }
+        $("#numElev_2").val(parseFloat(finNumElev));
+        if (isNaN(finNumElev) || finNumElev == null) {
+            $("#numElev_2").val("");
+        }   
     };
 
     function emptyElevatorsNumberAndPricesFields() {
         $('#numElev_3').val('');
         $('.priceField').val('');
+        $('#numElev_2').val('');
     };
 
     function createFormData(projectType) {
@@ -150,6 +182,13 @@ $(document).ready(function () {
             alert("Please enter a positive number!");
             $('#maxOcc').val('');
             return true
+
+        } else if ($('#numFloors').val() < 0) {
+            
+            alert("Please enter a positive number!");
+            $('#numFloors').val('');
+            return true
+
         } else {
             return false
         }
